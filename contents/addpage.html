@@ -1,9 +1,6 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
-
-<!-- Mirrored from demos.creative-tim.com/black-dashboard/examples/user.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 26 Apr 2020 08:31:29 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -92,7 +89,8 @@
         </ul>
       </div>
     </div>
-    <div class="main-panel">
+    <div class="main-panel" style="background-image: url('statics/addPage.jpg');">
+      
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
         <div class="container-fluid">
@@ -104,7 +102,7 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:void(0)">User Profile</a>
+            <a class="navbar-brand" href="javascript:void(0)">ANVESHAN Dashboard</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -151,116 +149,47 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="title">Edit Profile</h5>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="row">
-                  <div class="col-md-3 col-sm-12" style="margin: 0 auto; float: none; ">
-                    <h4 class="card-title">Avatar</h4>
-                    <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                      <div class="fileinput-new thumbnail img-circle">
-                        <img src="https://demos.creative-tim.com/marketplace/black-dashboard-pro/assets/img/placeholder.jpg" alt="...">
-                      </div>
-                      <div class="fileinput-preview fileinput-exists thumbnail img-circle"></div>
-                      <div>
-                        <span class="btn btn-round btn-rose btn-file">
-                          <span class="fileinput-new">Add Photo</span>
-                          <span class="fileinput-exists">Change</span>
-                          <input type="file" name="..." />
-                        </span>
-                        <br />
-                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
-                      </div>
+            <div class="col-md-6" style="margin: 0 auto; float: none; ">
+                <form id="RegisterValidation">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title">Add your webpage to our platform!</h4>
                     </div>
-                  </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-5 pr-md-1">
-                      <div class="form-group">
-                        <label>Company (disabled)</label>
-                        <input type="text" class="form-control" disabled="" placeholder="Company" value="Team ANVESHAN">
+                    <div class="card-body">
+                      <div class="form-group has-label">
+                        <label>
+                          URL *
+                        </label>
+                        <input class="form-control" name="email" type="email" required />
                       </div>
-                    </div>
-                    <div class="col-md-3 px-md-1">
-                      <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Username" value="laxman">
+                      <div class="form-group has-label">
+                        <label>
+                          Webpage title *
+                        </label>
+                        <input class="form-control" name="password" id="registerPassword" type="password" required />
                       </div>
-                    </div>
-                    <div class="col-md-4 pl-md-1">
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" placeholder="laxman@ayodhya.com">
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <h4 class="card-title">What's your webpage about?</h4>
+                          <input type="text" value="Ram,Bharat,Laxman,Shatrughan" class="tagsinput" data-role="tagsinput" data-color="danger" />
+                        </div>
                       </div>
+                      
+                      <div class="category form-category">* Required fields</div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6 pr-md-1">
-                      <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" placeholder="Company" value="Laxman">
+                    <div class="card-footer text-right">
+                      <div class="form-check pull-left">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" name="optionCheckboxes">
+                          <span class="form-check-sign"></span>
+                          Accept the terms and conditions
+                        </label>
                       </div>
-                    </div>
-                    <div class="col-md-6 pl-md-1">
-                      <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" placeholder="Last Name" value="Suryavanshi">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" class="form-control" placeholder="Home Address" value="Ayodhya">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4 pr-md-1">
-                      <div class="form-group">
-                        <label>City</label>
-                        <input type="text" class="form-control" placeholder="City" value="Laxman">
-                      </div>
-                    </div>
-                    <div class="col-md-4 px-md-1">
-                      <div class="form-group">
-                        <label>Country</label>
-                        <input type="text" class="form-control" placeholder="Country" value="XYZ">
-                      </div>
-                    </div>
-                    <div class="col-md-4 pl-md-1">
-                      <div class="form-group">
-                        <label>Postal Code</label>
-                        <input type="number" class="form-control" placeholder="PIN Code">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6 mb-4">
-                      <h4 class="card-title">Favourite Topics</h4>
-                      <input type="text" value="Ram,Bharat,Laxman,Shatrughan" class="tagsinput" data-role="tagsinput" data-color="danger" />
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-8">
-                      <div class="form-group">
-                        <label>About Me</label>
-                        <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Write something here</textarea>
-                      </div>
+                      <button type="submit" class="btn btn-primary">Add page!</button>
                     </div>
                   </div>
                 </form>
               </div>
-              <div class="card-footer">
-                <button type="submit" class="btn btn-fill btn-primary">Save</button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <footer class="footer">
@@ -599,12 +528,27 @@
   });
 </script>
 <script>
+  function setFormValidation(id) {
+    $(id).validate({
+      highlight: function(element) {
+        $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
+        $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
+      },
+      success: function(element) {
+        $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
+        $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
+      },
+      errorPlacement: function(error, element) {
+        $(element).closest('.form-group').append(error);
+      },
+    });
+  }
+
   $(document).ready(function() {
-    // initialise Datetimepicker and Sliders
-    blackDashboard.initDateTimePicker();
-    if ($('.slider').length != 0) {
-      demo.initSliders();
-    }
+    setFormValidation('#RegisterValidation');
+    setFormValidation('#TypeValidation');
+    setFormValidation('#LoginValidation');
+    setFormValidation('#RangeValidation');
   });
 </script>
 </body>
