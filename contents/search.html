@@ -134,7 +134,7 @@
                   <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Profile</a></li>
                   <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Settings</a></li>
                   <li class="dropdown-divider"></li>
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Log out</a></li>
+                  <li class="nav-link"><a href="register.html" class="nav-item dropdown-item">Log out</a></li>
                 </ul>
               </li>
               <li class="separator d-lg-none"></li>
@@ -168,17 +168,17 @@
                   <div class="card-body">
                     <form action="#">
                       <div class="form-group">
-                        <input type="text" class="form-control">
+                        <input id="queryBox" type="text" class="form-control">
                       </div>
                     </form>
                   </div>
                   <div class="card-footer">
                     <div class="col-md-4">
                         <p class="category"><b>Personalized Search</b></p>
-                        <input type="checkbox" checked name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" />
+                        <input id="personalizedToggle" type="checkbox" checked name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" onchange="personalizedToggler()"/>
                       </div>
-                      <button class="btn btn-info" style="float: right;">I'm feeling lucky!</button>
-                      <button type="submit" class="btn btn-danger" style="float: right;">Submit</button>  
+                      <button class="btn btn-info" style="float: right;" onclick="sendSearchQuery(true)">I'm feeling lucky!</button>
+                      <button type="submit" class="btn btn-danger" style="float: right;" onclick="sendSearchQuery(false)">Submit</button>  
                   </div>
                 </div>
               </div>
@@ -551,5 +551,6 @@
   });
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src='js/searchHandler.js'></script>
 </body>
 </html>
