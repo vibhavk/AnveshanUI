@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="statics/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="statics/favicon.ico">
+  <title>
     AnveshanUI
   </title>
   <!--     Fonts and icons     -->
@@ -165,7 +166,7 @@
                         <span class="btn btn-round btn-rose btn-file">
                           <span class="fileinput-new">Add Photo</span>
                           <span class="fileinput-exists">Change</span>
-                          <input type="file" name="..." />
+                          <input type="file" id="userAvatar" enctype="multipart/form-datas"/>
                         </span>
                         <br />
                         <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
@@ -177,19 +178,19 @@
                     <div class="col-md-5 pr-md-1">
                       <div class="form-group">
                         <label>Company (disabled)</label>
-                        <input type="text" class="form-control" disabled="" placeholder="Company" value="Team ANVESHAN">
+                        <input type="text" class="form-control" disabled="" placeholder="Company" id ="userCompany" value="Team ANVESHAN">
                       </div>
                     </div>
                     <div class="col-md-3 px-md-1">
                       <div class="form-group">
                         <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Username" value="laxman">
+                        <input type="text" class="form-control" placeholder="Username" id="userName" value="laxman">
                       </div>
                     </div>
                     <div class="col-md-4 pl-md-1">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" placeholder="laxman@ayodhya.com">
+                        <input type="email" class="form-control" id="userEmail" placeholder="laxman@ayodhya.com">
                       </div>
                     </div>
                   </div>
@@ -197,13 +198,13 @@
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
                         <label>First Name</label>
-                        <input type="text" class="form-control" placeholder="Company" value="Laxman">
+                        <input type="text" class="form-control" placeholder="Company" id="userFName" value="Laxman">
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">
                       <div class="form-group">
                         <label>Last Name</label>
-                        <input type="text" class="form-control" placeholder="Last Name" value="Suryavanshi">
+                        <input type="text" class="form-control" placeholder="Last Name" id="userLName" value="Suryavanshi">
                       </div>
                     </div>
                   </div>
@@ -211,7 +212,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Address</label>
-                        <input type="text" class="form-control" placeholder="Home Address" value="Ayodhya">
+                        <input type="text" class="form-control" placeholder="Home Address" id="userAddress" value="Ayodhya">
                       </div>
                     </div>
                   </div>
@@ -219,40 +220,40 @@
                     <div class="col-md-4 pr-md-1">
                       <div class="form-group">
                         <label>City</label>
-                        <input type="text" class="form-control" placeholder="City" value="Laxman">
+                        <input type="text" class="form-control" placeholder="City" id="userCity" value="Laxman">
                       </div>
                     </div>
                     <div class="col-md-4 px-md-1">
                       <div class="form-group">
                         <label>Country</label>
-                        <input type="text" class="form-control" placeholder="Country" value="XYZ">
+                        <input type="text" class="form-control" placeholder="Country" id="userCountry" value="XYZ">
                       </div>
                     </div>
                     <div class="col-md-4 pl-md-1">
                       <div class="form-group">
                         <label>Postal Code</label>
-                        <input type="number" class="form-control" placeholder="PIN Code">
+                        <input type="number" class="form-control" id="userPCode" placeholder="PIN Code">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6 mb-4">
                       <h4 class="card-title">Favourite Topics</h4>
-                      <input type="text" value="Ram,Bharat,Laxman,Shatrughan" class="tagsinput" data-role="tagsinput" data-color="danger" />
+                      <input type="text" value="Ram,Bharat,Laxman,Shatrughan" class="tagsinput" data-role="tagsinput" data-color="danger" id="userFavTopics" />
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-8">
                       <div class="form-group">
                         <label>About Me</label>
-                        <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Write something here</textarea>
+                        <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Ramanuj" id="userAbout">Write something here</textarea>
                       </div>
                     </div>
                   </div>
                 </form>
               </div>
               <div class="card-footer">
-                <button type="submit" class="btn btn-fill btn-primary">Save</button>
+                <button type="submit" class="btn btn-fill btn-primary" onclick="handleSave()">Save</button>
               </div>
             </div>
           </div>
@@ -610,5 +611,6 @@
   });
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src='js/userHandler.js'></script>
 </body>
 </html>
