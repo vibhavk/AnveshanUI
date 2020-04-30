@@ -19,9 +19,14 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="https://demos.creative-tim.com/marketplace/black-dashboard-pro/assets/demo/demo.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="style.css">
+  <script
+  src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+  integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+  crossorigin="anonymous"></script>
+
 </head>
 
-<body>
+<body onload="retrieveResults()">
   <!-- Extra details for Live View on GitHub Pages -->
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -178,110 +183,108 @@
                 </div>
               </div>
         </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom">Page 1 title</button>
-                          </div>
-                          <div class="card-body">
-                            <p class="text-info">
-                                <i class="tim-icons icon-paper"> </i>
-                                Jai Shree Ram!
-                            </p>
-                          </div>
-                          <div class="card-footer">
-
-                          </div>
-                        </div>
-                      </div>
+        <div id="resultsPlug">
+          <div class="row" id="result1">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <a href="https://www.google.com" id="linker1">
+                      <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom" id="result1text">Page 1 title</button>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-info">
+                        <i class="tim-icons icon-paper"> </i>
+                        Jai Shree Ram!
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                  </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom">Page 2 title</button>
-                          </div>
-                          <div class="card-body">
-                            <p class="text-info">
-                                <i class="tim-icons icon-paper"> </i>
-                                Jai Shree Ram!
-                            </p>
-                          </div>
-                          <div class="card-footer">
-
-                          </div>
-                        </div>
-                      </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom">Page 3 title</button>
-                          </div>
-                          <div class="card-body">
-                            <p class="text-info">
-                                <i class="tim-icons icon-paper"> </i>
-                                Jai Shree Ram!
-                            </p>
-                          </div>
-                          <div class="card-footer">
-
-                          </div>
-                        </div>
-                      </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom">Page 4 title</button>
-                          </div>
-                          <div class="card-body">
-                            <p class="text-info">
-                                <i class="tim-icons icon-paper"> </i>
-                                Jai Shree Ram!
-                            </p>
-                          </div>
-                          <div class="card-footer">
-
-                          </div>
-                        </div>
-                      </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom">Page 5 title</button>
-                          </div>
-                          <div class="card-body">
-                            <p class="text-info">
-                                <i class="tim-icons icon-paper"> </i>
-                                Jai Shree Ram!
-                            </p>
-                          </div>
-                          <div class="card-footer">
-
-                          </div>
-                        </div>
-                      </div>
-                </div>
-
-        <div class="row">
-            <div class="btn-group" data-toggle="buttons" style="margin: 0 auto; float: none; ">
-                <button type="button" class="btn btn-round btn-info">1</button>
-                <button type="button" class="btn btn-round btn-info">2</button>
-                <button type="button" class="btn btn-round btn-info">3</button>
-                <button type="button" class="btn btn-round btn-info">4</button>
-                <button type="button" class="btn btn-round btn-info">5</button>
-                <button type="button" class="btn btn-round btn-info">6</button>
-                <button type="button" class="btn btn-round btn-info">7</button>
-                <button type="button" class="btn btn-round btn-info">8</button>
-                <button type="button" class="btn btn-round btn-info">9</button>
-                <button type="button" class="btn btn-round btn-info">10</button>
               </div>
+          </div>
+          <div class="row" id="result2">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <a href="https://www.google.com" id="linker2">
+                      <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom" id="result2text">Page 1 title</button>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-info">
+                        <i class="tim-icons icon-paper"> </i>
+                        Jai Shree Ram!
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="row" id="result3">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <a href="https://www.google.com" id="linker3">
+                      <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom" id="result3text">Page 1 title</button>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-info">
+                        <i class="tim-icons icon-paper"> </i>
+                        Jai Shree Ram!
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="row" id="result4">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <a href="https://www.google.com" id="linker4">
+                      <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom" id="result4text">Page 1 title</button>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-info">
+                        <i class="tim-icons icon-paper"> </i>
+                        Jai Shree Ram!
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="row" id="result5">
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <a href="https://www.google.com" id="linker5">
+                      <button class="btn btn-success animation-on-hover" type="button" rel="tooltip" data-original-title="Go there!" data-placement="bottom" id="result5text">Page 1 title</button>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-info">
+                        <i class="tim-icons icon-paper"> </i>
+                        Jai Shree Ram!
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+        </div>
+        <div class="row">
+            <div class="btn-group" data-toggle="buttons" style="margin: 0 auto; float: none; " id="pageBar">
+                
+            </div>
         </div>
       </div>
       <footer class="footer">
@@ -629,5 +632,6 @@
     });
   </script>
  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+ <script src='js/searchHandler.js'></script>
 </body>
 </html>

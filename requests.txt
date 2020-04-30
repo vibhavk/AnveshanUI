@@ -1,0 +1,39 @@
+1.SEARCH request
+    1.1 Request string: {endpoint} + '{queryBox input from user}'
+    1.2 Request object structure: var searchQuery = {
+        personalized:personalized,
+        queryString:document.getElementById('queryBox').value,
+        lucky:lucky
+    };
+    HERE: personalized is a boolean variable describing whether user wants personalized search or not, queryString is a string variable, lucky is a boolean variable describing if user clicked "I'm feelinng lucky"  
+    1.3 Client expects an array of objects with each object corresponding to a result (each having id, title and url).
+
+2. SOCKET for Search suggest
+    2.1 A socket connection is established with server end-point at BASE_SOCKET_URL e.g. var searchSocket = new WebSocket(BASE_SOCKET_URL, '');
+    2.2 On change of input text in query-box, the client end of socket sends following message -> searchSocket.send(document.getElementById('queryBox').value);
+    2.3 CLIENT RESPONSE MESSAGE EXPECTATION: searchSocket.onmessage = function (event) {
+    var suggestions = event.data;
+    searchSuggestEditDropdown(suggestions);
+}
+    2.4 On window chane, the socket connection is closed. e.g. window.onhashchange = searchSocket.close();
+
+3. User Information request
+    3.1 ENDPOINT: BASE_USER_URL 
+    3.2 Request object structure var userUpdateRequestObj = {
+        avatarURL:document.getElementById("userAvatar").files[0],
+        userCompany: document.getElementById("userCompany").value,
+        userName: document.getElementById("userName").value,
+        userEmail: document.getElementById("userEmail").value,
+        userFName: document.getElementById("userFName").value,
+        userLName: document.getElementById("userLName").value,
+        userAddress: document.getElementById("userAddress").value,
+        userCity: document.getElementById("userCity").value,
+        userCountry: document.getElementById("userCountry").value,
+        userPCode: document.getElementById("userPCode").value,
+        userFavTopics: document.getElementById("userFavTopics").value,
+        userAbout: document.getElementById("userAbout").value,
+    };
+
+    Please note that avatarURL returns a base64 conversion of image uploaded by user, and needs to be converted to image at server end.
+    3.3 Upon receiving 200 OK response, the same data (as sent earlier) is updated
+    

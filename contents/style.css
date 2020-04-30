@@ -11,3 +11,10 @@
 .register-page{
     background-image: url("statics/better1.jpg");
 }
+
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
