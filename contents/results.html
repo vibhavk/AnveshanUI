@@ -182,12 +182,19 @@
                       <p class="category"><b>Personalized Search</b></p>
                       <input id="personalizedToggle" type="checkbox" checked name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" onchange="personalizedToggler()"/>
                     </div>
-                    <button class="btn btn-info" style="float: right;" onclick="sendSearchQuery(true)">I'm feeling lucky!</button>
-                    <button type="submit" class="btn btn-danger" style="float: right;" onclick="sendSearchQuery(false)">Submit</button>  
+                    <button class="btn btn-info" style="float: right;" onclick="sendSearchQueryFromResults(true)">I'm feeling lucky!</button>
+                    <button type="submit" class="btn btn-danger" style="float: right;" onclick="sendSearchQueryFromResults(false)">Submit</button>  
                 </div>
               </div>
             </div>
       </div>
+        <div id="sorryPlug">
+
+        </div>
+        <div id="dYMPlug">
+
+        </div>
+
         <div id="resultsPlug">
           <div class="row" id="result1">
             <div class="col-md-12">

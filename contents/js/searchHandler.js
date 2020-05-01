@@ -1,7 +1,7 @@
 
 
 BASE_URL = 'http://localhost:5000/';
-BASE_SEARCH_URL = 'http://d08d7a33.ngrok.io/search/';
+BASE_SEARCH_URL = 'http://d1d8be08.ngrok.io/search/';
 BASE_SOCKET_URL = 'http://localhost:5000/search-suggest';
 
 var content = null;
@@ -107,6 +107,17 @@ function renderCurrentPageResults(currentPageResults){
     document.getElementById('resultsWalaQueryBox').value = localStorage.getItem("searchquery");
 }
 
+function handleNoResultsFound(dYM){
+    renderCurrentPageResults([]);
+    var sorryPlug = document.getElementById('sorryPlug');
+    sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+
+    if(dYM !== null){
+    var dYMPlug = document.getElementById('dYMPlug');
+    dYMPlug.innerHTML = '<div class="alert alert-success"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i></button><span>Did you mean'+dym+'?</span></div>';
+    }
+}
+
 function renderResults(page){
     operatingPage=page-1;
     currentPageResults = pagedRes[operatingPage];
@@ -122,19 +133,45 @@ function renderResults(page){
 */
 
 function retrieveResults(){
-    var resultString = localStorage.getItem("resultsIntoString");
-    var stringIntoResults=JSON.parse(resultString);
-    readyResults(stringIntoResults);
-    var firstVisit = localStorage.getItem("firstVisit");
-    if(firstVisit === '0'){
-        renderResults(1);
+    var dym = localStorage.getItem("do_you_mean");
+    if(dym === null){
+        var dYMAvailable = localStorage.getItem("do_you_mean_available");
+        if(dYMAvailable === "no"){
+            //NRNDYM
+            console.log("Yes,NO RESULTS. NO DYM");
+            handleNoResultsFound(dym);
+        }else {
+            var resultString = localStorage.getItem("resultsIntoString");
+            var stringIntoResults=JSON.parse(resultString);
+            readyResults(stringIntoResults);
+            var firstVisit = localStorage.getItem("firstVisit");
+            if(firstVisit === '0'){
+            renderResults(1);
+            }
+        }
+    } else {
+        handleNoResultsFound(dym);   
     }
 }
-function saveResults(results){
-    var resultsIntoString = JSON.stringify(results);
-    localStorage.setItem("resultsIntoString", resultsIntoString);
-    localStorage.setItem("firstVisit", '0');
-    localStorage.setItem("searchquery",document.getElementById('queryBox').value);
+function saveResults(nr,results){
+    if(nr === true){
+        if(results === null){
+            localStorage.setItem("do_you_mean_available", "no");
+            console.log("NO RESULTS. NO DYM?");
+        }else{
+            localStorage.setItem("do_you_mean", results);
+        }
+    }else{
+        var resultsIntoString = JSON.stringify(results);
+        localStorage.setItem("resultsIntoString", resultsIntoString);
+        localStorage.setItem("firstVisit", '0');
+        if(document.getElementById('queryBox') == null){
+        localStorage.setItem("searchquery",document.getElementById('resultsWalaQueryBox').value);
+        } else{
+        localStorage.setItem("searchquery",document.getElementById('queryBox').value);
+        }
+    } 
+    
 }
 
 
@@ -142,7 +179,7 @@ function sendSearchQueryFromResults(lucky){
     var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('resultsWalaQueryBox').value);
     var searchQuery = {
         personalized:personalized,
-        queryString:document.getElementById('queryBox').value,
+        queryString:document.getElementById('resultsWalaQueryBox').value,
         lucky:lucky
     };
     axios.get(USER_SEARCH_URL,
@@ -150,7 +187,7 @@ function sendSearchQueryFromResults(lucky){
         )
        .then(function (response) {
             console.log(response)
-            results=response.data;
+            results=response.data.search_results;
             saveResults(results);
             window.location.replace('results.html');
          })
@@ -158,6 +195,7 @@ function sendSearchQueryFromResults(lucky){
             console.log(error);
          });
 }
+
 
 function sendSearchQuery(lucky){
 
@@ -173,9 +211,22 @@ function sendSearchQuery(lucky){
         )
        .then(function (response) {
             console.log(response)
-            results=response.data;
-            saveResults(results);
-            window.location.replace('results.html');
+            if(response.data.search_results === "No result Found" ){
+                console.log("NR!");
+                if(response.data.do_you_mean === undefined){
+                    console.log("dym nahi hai");
+                    saveResults(true,null);
+                    window.location.replace('results.html');
+                } else{
+                    console.log("dym hai");
+                    saveResults(true,response.data.do_you_mean);
+                    window.location.replace('results.html');
+                }
+            }else{
+                results=response.data.search_results;
+                saveResults(false,results);
+                window.location.replace('results.html');
+            }
          })
          .catch(function (error) {
             console.log(error);
