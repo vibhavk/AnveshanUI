@@ -1,7 +1,7 @@
 
 
 BASE_URL = 'http://localhost:5000/';
-BASE_SEARCH_URL = 'http://b4b1d3a2.ngrok.io/search/';
+BASE_SEARCH_URL = 'http://d08d7a33.ngrok.io/search/';
 BASE_SOCKET_URL = 'http://localhost:5000/search-suggest';
 
 var content = null;
@@ -34,7 +34,7 @@ function searchSuggestEditDropdown(suggestions){
 window.onhashchange = searchSocket.close();
 
 */
-
+var visitCount = 1;
 var pageCount = 0;
 
 function checkBoy(){
@@ -51,6 +51,18 @@ personalized = true;
 function personalizedToggler(){
     personalized = !personalized;
 }
+
+
+// function handleShitTheFirstTime(){
+//     if(parseInt(localStorage.getItem("visitCount") === 1)){
+//         retrieveResults();
+//         renderResults(1);
+//         localStorage.setItem("visitCount", visitCount+1);
+//     } else {
+//         retrieveResults();
+//     }
+    
+// }
 
 function addPageButtons(pCount){
     pageBar = document.getElementById('pageBar');
@@ -80,6 +92,7 @@ function readyResults(results){
 }
 
 function renderCurrentPageResults(currentPageResults){
+    console.log(currentPageResults);
     var difference = 5-currentPageResults.length;
     var textIdsToEdit = ["result1text","result2text","result3text","result4text","result5text"];
     var hrefIdsToEdit = ["linker1","linker2","linker3","linker4","linker5"]
@@ -88,9 +101,10 @@ function renderCurrentPageResults(currentPageResults){
         difference = difference-1;
     }
     for (q=0;q<currentPageResults.length;q++){
-        document.getElementById(textIdsToEdit[q]).innerHTML=currentPageResults[i].title;
-        document.getElementById(hrefIdsToEdit[q]).innerHTML=currentPageResults[i].url;
+        document.getElementById(textIdsToEdit[q]).innerHTML=currentPageResults[q].title[0] +' - '+ currentPageResults[q].url;
+        document.getElementById(hrefIdsToEdit[q]).href=currentPageResults[q].url;
     }
+    document.getElementById('resultsWalaQueryBox').value = localStorage.getItem("searchquery");
 }
 
 function renderResults(page){
@@ -111,10 +125,16 @@ function retrieveResults(){
     var resultString = localStorage.getItem("resultsIntoString");
     var stringIntoResults=JSON.parse(resultString);
     readyResults(stringIntoResults);
+    var firstVisit = localStorage.getItem("firstVisit");
+    if(firstVisit === '0'){
+        renderResults(1);
+    }
 }
 function saveResults(results){
     var resultsIntoString = JSON.stringify(results);
     localStorage.setItem("resultsIntoString", resultsIntoString);
+    localStorage.setItem("firstVisit", '0');
+    localStorage.setItem("searchquery",document.getElementById('queryBox').value);
 }
 
 
