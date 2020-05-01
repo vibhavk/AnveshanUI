@@ -162,27 +162,32 @@
       <!-- MAIN PANEL-->>
       <div class="content">
         <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <br>
-                        <div style="margin: 0 auto; float: none; ">
-                            <p id="icon" style="text-shadow: rgb(155, 20, 20) 0px 0px 0px, rgb(160, 21, 21) 1px 1px 0px, rgb(164, 21, 21) 2px 2px 0px, rgb(169, 22, 22) 3px 3px 0px, rgb(173, 23, 23) 4px 4px 0px, rgb(178, 23, 23) 5px 5px 0px, rgb(182, 24, 24) 6px 6px 0px, rgb(186, 24, 24) 7px 7px 0px, rgb(191, 25, 25) 8px 8px 0px, rgb(195, 26, 26) 9px 9px 0px, rgb(200, 26, 26) 10px 10px 0px, rgb(204, 27, 27) 11px 11px 0px, rgb(209, 27, 27) 12px 12px 0px, rgb(213, 28, 28) 13px 13px 0px, rgb(218, 28, 28) 14px 14px 0px; font-size: 80px; color: rgb(0, 0, 0); height: 150px; width: 150px; line-height: 150px; border-radius: 50%; text-align: center; background-color: rgb(222, 29, 29);"> अ </p> 
-                        </div>
-                  <div class="card-body">
-                    <form method="get" action="https://demos.creative-tim.com/" class="form-horizontal">
-                      <div class="row">
-                        <div class="col-sm-10 col-md-12">
-                          <div class="form-group has-success">
-                            <input type="text" class="form-control" value="Type your query string" id="resultsWalaQueryBox">
-                          </div>
-                          <button type="submit" class="btn btn-danger" style="float: right;">Search again!</button>  
-                        </div>
-                      </div>
-                    </form>
-                  </div>
+          <div class="col-md-6" style="margin: 0 auto; float: none; ">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">Search!</h4>
+                </div>
+                <div style="margin: 0 auto; float: none; ">
+                  <p id="icon" style="text-shadow: rgb(155, 20, 20) 0px 0px 0px, rgb(160, 21, 21) 1px 1px 0px, rgb(164, 21, 21) 2px 2px 0px, rgb(169, 22, 22) 3px 3px 0px, rgb(173, 23, 23) 4px 4px 0px, rgb(178, 23, 23) 5px 5px 0px, rgb(182, 24, 24) 6px 6px 0px, rgb(186, 24, 24) 7px 7px 0px, rgb(191, 25, 25) 8px 8px 0px, rgb(195, 26, 26) 9px 9px 0px, rgb(200, 26, 26) 10px 10px 0px, rgb(204, 27, 27) 11px 11px 0px, rgb(209, 27, 27) 12px 12px 0px, rgb(213, 28, 28) 13px 13px 0px, rgb(218, 28, 28) 14px 14px 0px; font-size: 80px; color: rgb(0, 0, 0); height: 150px; width: 150px; line-height: 150px; border-radius: 50%; text-align: center; background-color: rgb(222, 29, 29);"> अ </p> 
+                </div>
+                <div class="card-body">
+                  <form action="#">
+                    <div class="form-group">
+                      <input id="resultsWalaQueryBox" type="text" class="form-control">
+                    </div>
+                  </form>
+                </div>
+                <div class="card-footer">
+                  <div class="col-md-4">
+                      <p class="category"><b>Personalized Search</b></p>
+                      <input id="personalizedToggle" type="checkbox" checked name="checkbox" class="bootstrap-switch" data-on-label="ON" data-off-label="OFF" onchange="personalizedToggler()"/>
+                    </div>
+                    <button class="btn btn-info" style="float: right;" onclick="sendSearchQuery(true)">I'm feeling lucky!</button>
+                    <button type="submit" class="btn btn-danger" style="float: right;" onclick="sendSearchQuery(false)">Submit</button>  
                 </div>
               </div>
-        </div>
+            </div>
+      </div>
         <div id="resultsPlug">
           <div class="row" id="result1">
             <div class="col-md-12">

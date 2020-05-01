@@ -138,6 +138,27 @@ function saveResults(results){
 }
 
 
+function sendSearchQueryFromResults(lucky){
+    var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('resultsWalaQueryBox').value);
+    var searchQuery = {
+        personalized:personalized,
+        queryString:document.getElementById('queryBox').value,
+        lucky:lucky
+    };
+    axios.get(USER_SEARCH_URL,
+        searchQuery
+        )
+       .then(function (response) {
+            console.log(response)
+            results=response.data;
+            saveResults(results);
+            window.location.replace('results.html');
+         })
+         .catch(function (error) {
+            console.log(error);
+         });
+}
+
 function sendSearchQuery(lucky){
 
     var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('queryBox').value);
