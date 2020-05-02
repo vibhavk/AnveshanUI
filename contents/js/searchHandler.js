@@ -1,8 +1,10 @@
 
 
 BASE_URL = 'http://localhost:5000/';
-BASE_SEARCH_URL = 'http://d1d8be08.ngrok.io/search/';
+BASE_SEARCH_URL = 'http://df221ddc.ngrok.io/search/';
 BASE_SOCKET_URL = 'http://localhost:5000/search-suggest';
+
+var queryStringdYM=null;
 
 var content = null;
 
@@ -53,17 +55,6 @@ function personalizedToggler(){
 }
 
 
-// function handleShitTheFirstTime(){
-//     if(parseInt(localStorage.getItem("visitCount") === 1)){
-//         retrieveResults();
-//         renderResults(1);
-//         localStorage.setItem("visitCount", visitCount+1);
-//     } else {
-//         retrieveResults();
-//     }
-    
-// }
-
 function addPageButtons(pCount){
     pageBar = document.getElementById('pageBar');
     for (i=0;i<pCount;i++){
@@ -104,17 +95,51 @@ function renderCurrentPageResults(currentPageResults){
         document.getElementById(textIdsToEdit[q]).innerHTML=currentPageResults[q].title[0] +' - '+ currentPageResults[q].url;
         document.getElementById(hrefIdsToEdit[q]).href=currentPageResults[q].url;
     }
-    document.getElementById('resultsWalaQueryBox').value = localStorage.getItem("searchquery");
+    document.getElementById('resultsWalaQueryBox').value = sessionStorage.getItem("searchquery");
+}
+
+function sendSearchQueryFromDYM(){
+    console.log("queryDYM hit!: "+ queryStringdYM);
+    debugger;
+    var USER_SEARCH_URL = String(BASE_SEARCH_URL + queryStringdYM);
+    var searchQuery = {};
+    console.log("here! now, sending request");
+    axios.get(USER_SEARCH_URL,
+        searchQuery
+        )
+       .then(function (response) {
+            debugger;
+            results=response.data.search_results;
+            console.log(results);
+            debugger;
+            saveResults(false,results);
+            debugger;
+            sessionStorage.setItem("handledByDYM","yes");
+            window.location.replace('results.html');
+         })
+         .catch(function (error) {
+            console.log(error);
+         });
+
 }
 
 function handleNoResultsFound(dYM){
+    debugger;
+    console.log('Entered handle no results found!');
+    //console.log(dYM);
+    debugger;
     renderCurrentPageResults([]);
+    debugger;
     var sorryPlug = document.getElementById('sorryPlug');
     sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+    debugger;
 
     if(dYM !== null){
-    var dYMPlug = document.getElementById('dYMPlug');
-    dYMPlug.innerHTML = '<div class="alert alert-success"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i></button><span>Did you mean'+dym+'?</span></div>';
+        debugger;
+        queryStringdYM = dYM;
+        var dYMPlug = document.getElementById('dYMPlug');
+        dYMPlug.innerHTML = '<button type="button" onclick="sendSearchQueryFromDYM()" class="btn btn-danger" id="dYMButton" style="float: right;">'+'Did you mean "'+(dYM)+'" ?</button>  ';
+        debugger;
     }
 }
 
@@ -133,42 +158,70 @@ function renderResults(page){
 */
 
 function retrieveResults(){
-    var dym = localStorage.getItem("do_you_mean");
-    if(dym === null){
-        var dYMAvailable = localStorage.getItem("do_you_mean_available");
-        if(dYMAvailable === "no"){
-            //NRNDYM
-            console.log("Yes,NO RESULTS. NO DYM");
-            handleNoResultsFound(dym);
-        }else {
-            var resultString = localStorage.getItem("resultsIntoString");
+    var dym = sessionStorage.getItem("do_you_mean");
+    //if(dym !== null){
+      //  sessionStorage.setItem("validResults?","yes");
+    //}
+    var validResults = sessionStorage.getItem("validResults?");
+    console.log(validResults);
+    if(validResults === "yes"){
+            var resultString = sessionStorage.getItem("resultsIntoString");
             var stringIntoResults=JSON.parse(resultString);
             readyResults(stringIntoResults);
-            var firstVisit = localStorage.getItem("firstVisit");
+            sessionStorage.removeItem("validResults?");
+            var firstVisit = sessionStorage.getItem("firstVisit");
             if(firstVisit === '0'){
             renderResults(1);
             }
+    }else{
+        //console.log(dym);
+        if(dym === null){
+            var dYMAvailable = sessionStorage.getItem("do_you_mean_available");
+
+            if(dYMAvailable === "no"){
+                //NRNDYM
+                console.log("Yes,NO RESULTS. NO DYM");
+                debugger;
+                handleNoResultsFound(dym);
+                debugger;
+            }
+        } else {
+            debugger;
+            handleNoResultsFound(dym);
+            debugger;   
         }
-    } else {
-        handleNoResultsFound(dym);   
     }
+
 }
 function saveResults(nr,results){
     if(nr === true){
         if(results === null){
-            localStorage.setItem("do_you_mean_available", "no");
+            sessionStorage.setItem("do_you_mean_available", "no");
             console.log("NO RESULTS. NO DYM?");
         }else{
-            localStorage.setItem("do_you_mean", results);
+            console.log("NO RESULTS. BUT A DYM!");
+            sessionStorage.setItem("do_you_mean_available", "yes");
+            debugger;
+            console.log(results);
+            debugger;
+            sessionStorage.setItem("do_you_mean", results);
+            debugger;
+
         }
     }else{
+        debugger;
+        console.log(results);
         var resultsIntoString = JSON.stringify(results);
-        localStorage.setItem("resultsIntoString", resultsIntoString);
-        localStorage.setItem("firstVisit", '0');
+        debugger;
+        console.log(resultsIntoString);
+        debugger;
+        sessionStorage.setItem("resultsIntoString", resultsIntoString);
+        debugger;
+        sessionStorage.setItem("firstVisit", '0');
         if(document.getElementById('queryBox') == null){
-        localStorage.setItem("searchquery",document.getElementById('resultsWalaQueryBox').value);
+        sessionStorage.setItem("searchquery",document.getElementById('resultsWalaQueryBox').value);
         } else{
-        localStorage.setItem("searchquery",document.getElementById('queryBox').value);
+        sessionStorage.setItem("searchquery",document.getElementById('queryBox').value);
         }
     } 
     
@@ -188,7 +241,7 @@ function sendSearchQueryFromResults(lucky){
        .then(function (response) {
             console.log(response)
             results=response.data.search_results;
-            saveResults(results);
+            saveResults(false,results);
             window.location.replace('results.html');
          })
          .catch(function (error) {
@@ -210,21 +263,40 @@ function sendSearchQuery(lucky){
         searchQuery
         )
        .then(function (response) {
-            console.log(response)
+            console.log(response);
+            debugger;
+            console.log(response.data.search_results);
+            debugger;
             if(response.data.search_results === "No result Found" ){
                 console.log("NR!");
+                debugger;
                 if(response.data.do_you_mean === undefined){
                     console.log("dym nahi hai");
                     saveResults(true,null);
+                    sessionStorage.setItem("validResults?","no");
                     window.location.replace('results.html');
                 } else{
                     console.log("dym hai");
+                    debugger;
                     saveResults(true,response.data.do_you_mean);
-                    window.location.replace('results.html');
+                    debugger;
+                    //coming from dym-helped search
+                    console.log(response.data.search_results);
+                    debugger;
+                    console.log(sessionStorage.getItem("handledByDYM"));
+                    debugger;
+                    if(sessionStorage.getItem("handledByDYM")){
+                        window.location.replace('results.html');
+                    }else{
+                        sessionStorage.setItem("validResults?","no");
+                        window.location.replace('results.html');
+                    }
                 }
             }else{
+                console.log("valid results");
                 results=response.data.search_results;
                 saveResults(false,results);
+                sessionStorage.setItem("validResults?","yes");
                 window.location.replace('results.html');
             }
          })
