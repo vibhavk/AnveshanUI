@@ -17,9 +17,7 @@ var pageCount = 0;
 var pagedRes = Array();
 var currentPageResults = Array(); 
 
-//Uncomment when server socket code is written and put onchange=blah blah in query box input on HTML page
-/* 
-var searchSocket = new WebSocket(BASE_SOCKET_URL, '');
+/*var searchSocket = new WebSocket(BASE_SOCKET_URL, '');
 
 function searchSuggestRequest(){
     searchSocket.send(document.getElementById('queryBox').value);
@@ -34,7 +32,6 @@ function searchSuggestEditDropdown(suggestions){
 }
 
 window.onhashchange = searchSocket.close();
-
 */
 var visitCount = 1;
 var pageCount = 0;
@@ -99,32 +96,6 @@ function renderCurrentPageResults(currentPageResults){
     handleNoResultsFound();
 }
 
-/*function sendSearchQueryFromDYM(){
-    console.log("queryDYM hit!: "+ queryStringdYM);
-    
-    var USER_SEARCH_URL = String(BASE_SEARCH_URL + queryStringdYM);
-    var searchQuery = {};
-    console.log("here! now, sending request");
-    axios.get(USER_SEARCH_URL,
-        searchQuery
-        )
-       .then(function (response) {
-            
-            results=response.data.search_results;
-            console.log(results);
-            
-            saveResults(false,results);
-            
-            sessionStorage.setItem("handledByDYM","yes");
-            window.location.replace('results.html');
-         })
-         .catch(function (error) {
-            console.log(error);
-         });
-
-GoodSearch?
-*/
-
 function handleNoResultsFound(){
     
     console.log('Entered handle no results found!');
@@ -133,14 +104,9 @@ function handleNoResultsFound(){
 
     var goodSearch = sessionStorage.getItem("GoodSearch?");
     console.log(goodSearch);
-    
-    if(goodSearch === "no"){
-        
-        var sorryPlug = document.getElementById('sorryPlug');
-        sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
-        
-
-    }
+    console.log(sessionStorage.getItem("FixedBydYM?"));
+    var sorryPlug = document.getElementById('sorryPlug');
+    sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
     var alternative = sessionStorage.getItem("alternative");
     if(alternative !== null){
         
@@ -281,6 +247,7 @@ function sendSearchQuery(lucky){
                        .then(function (response) {
                             console.log(response);
                             results=response.data.search_results;
+                            sessionStorage.setItem("FixedBydYM?","yes");
                             saveResults(results);
                             window.location.replace('results.html');
                          })
