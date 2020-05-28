@@ -17,22 +17,23 @@ var pageCount = 0;
 var pagedRes = Array();
 var currentPageResults = Array(); 
 
-/*var searchSocket = new WebSocket(BASE_SOCKET_URL, '');
 
-function searchSuggestRequest(){
+
+var searchSocket = io.connect(BASE_URL);
+
+function askForSuggestion(){
     searchSocket.send(document.getElementById('queryBox').value);
 }
 
-searchSocket.onmessage = function (event) {
-    var suggestions = event.data;
-    searchSuggestEditDropdown(suggestions);
-}
+searchSocket.on("message", searchSuggestEditDropdown(message));
+
 function searchSuggestEditDropdown(suggestions){
-    //populate a dropdown with suggestions from server
+    console.log('Message Recieved');
+    console.log(message);
 }
 
 window.onhashchange = searchSocket.close();
-*/
+
 var visitCount = 1;
 var pageCount = 0;
 
