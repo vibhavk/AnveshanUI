@@ -4,6 +4,8 @@ BASE_URL = 'http://8e583380c1a6.ngrok.io/';
 BASE_SEARCH_URL = BASE_URL+ 'search/';
 BASE_SOCKET_URL = BASE_URL;
 
+var resultsOnResultsPage = Array();
+
 var queryStringdYM=null;
 
 var content = null;
@@ -18,7 +20,12 @@ var pagedRes = Array();
 var currentPageResults = Array();
 var recomm = null; 
 
+var contentArray = Array();
+var contentValueHolder = Array();
+var contentIDHolder = Array();
 
+var resultString = null;
+var stringIntoResults = null;
 
 var searchSocket = io.connect(BASE_URL);
 console.log(searchSocket);
@@ -39,6 +46,22 @@ function populateRecomm(recommendation){
         datalist.innerHTML += '<option>'+ recommendation[i] + '</option>';
     }
 }
+
+function checkForContentMount(){
+    var contentsToEdit = ["content1","content2","content3","content4","content5"];
+    for (i=0; i<currentPageResults.length;i++){
+        if(contentIDHolder.indexOf(currentPageResults[i]._id) != -1){
+            document.getElementById(contentsToEdit[i]).innerHTML = contentValueHolder[contentIDHolder.indexOf(currentPageResults[i]._id)];
+        }
+    }
+}
+
+searchSocket.on("content",function(message){
+    console.log(message);
+    contentValueHolder.push(message.data);
+    contentIDHolder.push(message._id);
+    checkForContentMount();
+});
 
 searchSocket.on("message", function(message){
     console.log(message);
@@ -105,17 +128,30 @@ function renderCurrentPageResults(currentPageResults){
     console.log(currentPageResults);
     var difference = 5-currentPageResults.length;
     var textIdsToEdit = ["result1text","result2text","result3text","result4text","result5text"];
-    var hrefIdsToEdit = ["linker1","linker2","linker3","linker4","linker5"]
+    var hrefIdsToEdit = ["linker1","linker2","linker3","linker4","linker5"];
+    var contentsToEdit = ["content1","content2","content3","content4","content5"];
     while(difference>0){
         document.getElementById("resultsPlug").lastElementChild.remove();
         difference = difference-1;
     }
+
+    for(j=0;j<contentArray.length;j++){
+        contentValueHolder[j] = contentArray[j].data;
+        contentIDHolder[j] = contentArray[j]._id;
+    }
+    
+    console.log(contentValueHolder);
+    console.log(contentIDHolder);
+
     for (q=0;q<currentPageResults.length;q++){
         document.getElementById(textIdsToEdit[q]).innerHTML=currentPageResults[q].title[0] +' - '+ currentPageResults[q].url;
         document.getElementById(hrefIdsToEdit[q]).href=currentPageResults[q].url;
+        document.getElementById(contentsToEdit[q]).innerHTML = currentPageResults[q]._id;
+        
     }
     document.getElementById('resultsWalaQueryBox').value = sessionStorage.getItem("searchquery");
     handleNoResultsFound();
+    checkForContentMount();
 }
 
 function handleNoResultsFound(){
@@ -156,8 +192,8 @@ function renderResults(page){
 function retrieveResults(){
     var validResults = sessionStorage.getItem("validResults?");
     console.log(validResults);
-    var resultString = sessionStorage.getItem("resultsIntoString");
-    var stringIntoResults=JSON.parse(resultString);
+    resultString = sessionStorage.getItem("resultsIntoString");
+    stringIntoResults=JSON.parse(resultString);
     readyResults(stringIntoResults);
     sessionStorage.removeItem("validResults?");
     var firstVisit = sessionStorage.getItem("firstVisit");
