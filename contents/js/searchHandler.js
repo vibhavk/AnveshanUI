@@ -1,6 +1,6 @@
 
 
-BASE_URL = 'http://9e411c1b73f7.ngrok.io/';
+BASE_URL = 'http://8e583380c1a6.ngrok.io/';
 BASE_SEARCH_URL = BASE_URL+ 'search/';
 BASE_SOCKET_URL = BASE_URL;
 
@@ -25,6 +25,11 @@ console.log(searchSocket);
 
 function askForSuggestion(){
     searchSocket.send(JSON.stringify({"query":document.getElementById('queryBox').value}));
+    console.log('asking for suggestions!');
+}
+
+function askForSuggestionFromResults(){
+    searchSocket.send(JSON.stringify({"query":document.getElementById('resultsWalaQueryBox').value}));
     console.log('asking for suggestions!');
 }
 
@@ -123,7 +128,9 @@ function handleNoResultsFound(){
     console.log(goodSearch);
     console.log(sessionStorage.getItem("FixedBydYM?"));
     var sorryPlug = document.getElementById('sorryPlug');
-    sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+    if(goodSearch !== 'yes'){
+        sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';   
+    }
     var alternative = sessionStorage.getItem("alternative");
     if(alternative !== null){
         

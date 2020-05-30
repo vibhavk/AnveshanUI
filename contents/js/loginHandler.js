@@ -1,4 +1,4 @@
-BASE_LOGIN_URL = 'http://0fd9a32206d8.ngrok.io/login';
+BASE_LOGIN_URL = 'http://8e583380c1a6.ngrok.io/login';
 
 function handleUserLogin(){
         var userInfoLogin = {
