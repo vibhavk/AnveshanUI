@@ -17,7 +17,6 @@
   <link href="https://demos.creative-tim.com/marketplace/black-dashboard-pro/assets/css/black-dashboard.min.css?v=1.1.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="https://demos.creative-tim.com/marketplace/black-dashboard-pro/assets/demo/demo.css" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -166,10 +165,12 @@
                     <p id="icon" style="text-shadow: rgb(155, 20, 20) 0px 0px 0px, rgb(160, 21, 21) 1px 1px 0px, rgb(164, 21, 21) 2px 2px 0px, rgb(169, 22, 22) 3px 3px 0px, rgb(173, 23, 23) 4px 4px 0px, rgb(178, 23, 23) 5px 5px 0px, rgb(182, 24, 24) 6px 6px 0px, rgb(186, 24, 24) 7px 7px 0px, rgb(191, 25, 25) 8px 8px 0px, rgb(195, 26, 26) 9px 9px 0px, rgb(200, 26, 26) 10px 10px 0px, rgb(204, 27, 27) 11px 11px 0px, rgb(209, 27, 27) 12px 12px 0px, rgb(213, 28, 28) 13px 13px 0px, rgb(218, 28, 28) 14px 14px 0px; font-size: 80px; color: rgb(0, 0, 0); height: 150px; width: 150px; line-height: 150px; border-radius: 50%; text-align: center; background-color: rgb(222, 29, 29);"> अ </p> 
                   </div>
                   <div class="card-body">
-                    <form action="#">
+                    <form action="#" autocomplete="off">
                       <div class="form-group">
-                        <input id="queryBox" type="text" class="form-control" onchange="askForSuggestion()">
+                          <input autocomplete="off" list="queryInput" id="queryBox" type="text" class="form-control" onchange="askForSuggestion()">
                       </div>
+                      <datalist id="queryInput">
+                      </datalist>
                     </form>
                   </div>
                   <div class="card-footer">

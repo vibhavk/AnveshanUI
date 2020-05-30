@@ -173,8 +173,10 @@
                 <div class="card-body">
                   <form action="#">
                     <div class="form-group">
-                      <input id="resultsWalaQueryBox" type="text" class="form-control">
+                        <input autocomplete="off" list="queryInput" id="resultsWalaQueryBox" type="text" class="form-control" onchange="askForSuggestion()">
                     </div>
+                    <datalist id="queryInput">
+                    </datalist>
                   </form>
                 </div>
                 <div class="card-footer">

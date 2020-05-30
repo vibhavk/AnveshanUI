@@ -90,10 +90,10 @@
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <div class="input-group-text">
-                        <i class="tim-icons icon-email-85"></i>
+                        <i class="tim-icons icon-single-02"></i>
                       </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Email">
+                    <input type="text" class="form-control" placeholder="username" id="userNameLogin">
                   </div>
                   <div class="input-group">
                     <div class="input-group-prepend">
@@ -101,11 +101,11 @@
                         <i class="tim-icons icon-lock-circle"></i>
                       </div>
                     </div>
-                    <input type="text" placeholder="Password" class="form-control">
+                    <input type="text" placeholder="Password" class="form-control" id="userPasswordLogin">
                   </div>
                 </div>
-                <div class="card-footer">
-                  <a href="#pablo" class="btn btn-primary btn-lg btn-block mb-3">Get Started</a>
+                <div class="card-footer" onclick="handleUserLogin()">
+                  <a href="#pablo" class="btn btn-primary btn-lg btn-block mb-3">Get searchin'</a>
                   <div class="pull-left">
                     <h6>
                       <a href="register.html" class="link footer-link">Create Account</a>
@@ -402,5 +402,6 @@
     });
   </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/loginHandler.js"></script>
 </body>
 </html>

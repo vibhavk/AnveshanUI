@@ -18,3 +18,7 @@ main{
     width: 100%;
     align-items: center;
 }
+input::-webkit-calendar-picker-indicator {
+    display: none;
+    opacity: 0;
+}

@@ -1,8 +1,8 @@
 
 
-BASE_URL = 'http://localhost:5000/';
-BASE_SEARCH_URL = 'http://e67d1061.ngrok.io/search/';
-BASE_SOCKET_URL = 'http://localhost:5000/search-suggest';
+BASE_URL = 'http://9e411c1b73f7.ngrok.io/';
+BASE_SEARCH_URL = BASE_URL+ 'search/';
+BASE_SOCKET_URL = BASE_URL;
 
 var queryStringdYM=null;
 
@@ -15,24 +15,39 @@ var resShow = null;
 var pageCount = 0;
 
 var pagedRes = Array();
-var currentPageResults = Array(); 
+var currentPageResults = Array();
+var recomm = null; 
 
 
 
 var searchSocket = io.connect(BASE_URL);
+console.log(searchSocket);
 
 function askForSuggestion(){
-    searchSocket.send(document.getElementById('queryBox').value);
+    searchSocket.send(JSON.stringify({"query":document.getElementById('queryBox').value}));
+    console.log('asking for suggestions!');
 }
 
-searchSocket.on("message", searchSuggestEditDropdown(message));
+function populateRecomm(recommendation){
+    datalist = document.getElementById('queryInput');
+    for (i=0;i<recommendation.length;i++){
+        datalist.innerHTML += '<option>'+ recommendation[i] + '</option>';
+    }
+}
 
-function searchSuggestEditDropdown(suggestions){
-    console.log('Message Recieved');
+searchSocket.on("message", function(message){
     console.log(message);
-}
+    if(JSON.parse(message).frequent_search != undefined){
+        populateRecomm(JSON.parse(message).frequent_search);
+    } else {
+        populateRecomm(JSON.parse(message).recommendations);
+    }    
+});
+// function searchSuggestEditDropdown(){
+    // console.log('Message Recieved');
+// }
 
-window.onhashchange = searchSocket.close();
+//window.onhashchange = searchSocket.close();
 
 var visitCount = 1;
 var pageCount = 0;
@@ -40,13 +55,14 @@ var pageCount = 0;
 function checkBoy(){
 }
 
-var parser = new DOMParser();
 
 var config = {
     headers:{'Access-Control-Allow-Origin':'*'}
 }
 
-personalized = true;
+var personalized = true;
+
+console.log("Personalized is "+ personalized);
 
 function personalizedToggler(){
     personalized = !personalized;
@@ -164,6 +180,58 @@ function saveResults(results){
 
 function sendSearchQueryFromResults(lucky){
     var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('resultsWalaQueryBox').value);
+
+    if(personalized){
+        if(Boolean(sessionStorage.getItem("loggedIn"))){
+            USER_SEARCH_URL = String(BASE_URL+ sessionStorage.getItem("username") + '/search');
+            var searchQuery = {
+                query:document.getElementById('queryBox').value,
+                personalization:personalized,
+            };
+            axios.post(USER_SEARCH_URL,
+                searchQuery
+                )
+               .then(function (response) {
+                    console.log(response);
+                    
+                    console.log(response.data.search_results);
+                    
+                    if(response.data.search_results === "No result Found" ){
+                        console.log("NR!");
+                        
+                        sessionStorage.setItem("GoodSearch?"," no");
+                        console.log("Gotta ask server for something that makes sense!");
+                        
+                        //process do you mean
+                        if(response.data.do_you_mean !== undefined){
+                            sessionStorage.setItem("dYM?","yes");
+                            sessionStorage.setItem("alternative",response.data.do_you_mean);
+                            axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
+                                {}
+                                )
+                               .then(function (response) {
+                                    console.log(response);
+                                    results=response.data.search_results;
+                                    sessionStorage.setItem("FixedBydYM?","yes");
+                                    saveResults(results);
+                                    window.location.replace('results.html');
+                                 })
+                                 .catch(function (error) {
+                                    console.log(error);
+                                 });
+                        }
+                    }else{
+                        sessionStorage.setItem("GoodSearch?","yes");
+                        results=response.data.search_results;
+                        saveResults(results);
+                        window.location.replace('results.html');
+                    }
+                 })
+                 .catch(function (error) {
+                    console.log(error);
+                 });
+        }
+    }
     
     var searchQuery = {
         personalized:personalized,
@@ -213,14 +281,66 @@ function sendSearchQueryFromResults(lucky){
             console.log(error);
          });
 }
-
+//document.getElementById('queryBox').value
 
 function sendSearchQuery(lucky){
 
     var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('queryBox').value);
+    console.log("personalized is " + personalized);
+    if(personalized){
+        if(Boolean(sessionStorage.getItem("loggedIn"))){
+            USER_SEARCH_URL = String(BASE_URL+ sessionStorage.getItem("username") + '/search');
+            var searchQuery = {
+                query:document.getElementById('queryBox').value,
+                personalization:personalized,
+            };
+            axios.post(USER_SEARCH_URL,
+                searchQuery
+                )
+               .then(function (response) {
+                    console.log(response);
+                    
+                    console.log(response.data.search_results);
+                    
+                    if(response.data.search_results === "No result Found" ){
+                        console.log("NR!");
+                        
+                        sessionStorage.setItem("GoodSearch?"," no");
+                        console.log("Gotta ask server for something that makes sense!");
+                        
+                        //process do you mean
+                        if(response.data.do_you_mean !== undefined){
+                            sessionStorage.setItem("dYM?","yes");
+                            sessionStorage.setItem("alternative",response.data.do_you_mean);
+                            axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
+                                {}
+                                )
+                               .then(function (response) {
+                                    console.log(response);
+                                    results=response.data.search_results;
+                                    sessionStorage.setItem("FixedBydYM?","yes");
+                                    saveResults(results);
+                                    window.location.replace('results.html');
+                                 })
+                                 .catch(function (error) {
+                                    console.log(error);
+                                 });
+                        }
+                    }else{
+                        sessionStorage.setItem("GoodSearch?","yes");
+                        results=response.data.search_results;
+                        saveResults(results);
+                        window.location.replace('results.html');
+                    }
+                 })
+                 .catch(function (error) {
+                    console.log(error);
+                 });
+        }
+    }
     
     var searchQuery = {
-        personalized:personalized,
+        personalization:personalized,
         queryString:document.getElementById('queryBox').value,
         lucky:lucky
     };

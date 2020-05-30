@@ -1,13 +1,14 @@
 
-BASE_REG_URL = 'http://localhost:5000/register';
+BASE_REG_URL = 'http://c83607ee0d3b.ngrok.io/register';
 
 function handleUserReg(){
     var agreeToTnC = document.getElementById('agreeToTnC').checked;
     console.log(agreeToTnC);
     if(agreeToTnC){
         var userInfo = {
-            userName:document.getElementById('userName').value,
-            userPassword:document.getElementById('userPassword').value
+            username:document.getElementById('userName').value,
+            password:document.getElementById('userPassword').value,
+            confirm_password:document.getElementById('userPassword').value
         }
         axios.post(BASE_REG_URL, 
             userInfo)
