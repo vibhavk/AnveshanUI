@@ -94,6 +94,7 @@ console.log("Personalized is "+ personalized);
 
 function personalizedToggler(){
     personalized = !personalized;
+    console.log('Personalized switched to '+ personalized);
 }
 
 
@@ -249,8 +250,10 @@ function sendSearchQueryFromResults(lucky){
                         if(response.data.do_you_mean !== undefined){
                             sessionStorage.setItem("dYM?","yes");
                             sessionStorage.setItem("alternative",response.data.do_you_mean);
-                            axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
-                                {}
+                            axios.get(USER_SEARCH_URL,{
+                                query:response.data.do_you_mean,
+                                personalized:personalized
+                            }
                                 )
                                .then(function (response) {
                                     console.log(response);
@@ -277,7 +280,6 @@ function sendSearchQueryFromResults(lucky){
     }
     
     var searchQuery = {
-        personalized:personalized,
         queryString:document.getElementById('resultsWalaQueryBox').value,
         lucky:lucky
     };

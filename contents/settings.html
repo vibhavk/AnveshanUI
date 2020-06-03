@@ -96,7 +96,7 @@
         </ul>
       </div>
     </div>
-    <div class="main-panel" style="background-image: url('statics/better1.jpg');">
+    <div class="main-panel" style="background-image: url('statics/160815.jpg');">
       
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
@@ -109,7 +109,9 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:void(0)">ANVESHAN Dashboard</a>
+            <a class="navbar-brand" href="search.html"><button class="btn btn-google">
+              <i class="fab"></i> ANVESHAN!
+            </button></a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -156,7 +158,21 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
-
+          <div class="col-md-6" style="margin: 0 auto; float: none; ">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Search Parameter settings!</h4>
+              </div>
+              <div class="card-body">
+                <input autocomplete="off" id="bmValueBox" type="text" class="form-control" onchange="" placeholder="BM-25 value between 0.0 to 1.0">
+                <br>
+                <input autocomplete="off" id="prValueBox" type="text" class="form-control" onchange="" placeholder="PR value between 0.0 to 1.0">
+              </div>
+              <div class="card-footer">
+                <button type="submit" class="btn btn-danger" style="float: right;" onclick="updateBias()">Update params!</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <footer class="footer">
@@ -504,5 +520,6 @@
     });
   </script>
  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+ <script src="js/settingsHandler.js"></script>
 </body>
 </html>
