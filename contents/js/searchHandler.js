@@ -382,6 +382,7 @@ function sendSearchQuery(lucky){
                     console.log(error);
                  });
         }
+        window.alert("Please login for personalized search experience! Want to continue in guest mode?");
     }
     
     var searchQuery = {
