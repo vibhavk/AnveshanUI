@@ -1,6 +1,6 @@
 
 
-BASE_URL = 'http://8e583380c1a6.ngrok.io/';
+BASE_URL = 'http://834cba8c57a1.ngrok.io/';
 BASE_SEARCH_URL = BASE_URL+ 'search/';
 BASE_SOCKET_URL = BASE_URL;
 
@@ -40,6 +40,14 @@ function askForSuggestionFromResults(){
     console.log('asking for suggestions!');
 }
 
+function populateFreqSearch(recommendation){
+    console.log('entering populate recommendation')
+    topPlugList = ["topsearch1","topsearch2","topsearch3","topsearch4","topsearch5"];
+    for(k=0;k<topPlugList.length;k++){
+        document.getElementById(topPlugList[k]).innerHTML = recommendation[k];
+    }
+}
+
 function populateRecomm(recommendation){
     datalist = document.getElementById('queryInput');
     for (i=0;i<recommendation.length;i++){
@@ -66,7 +74,7 @@ searchSocket.on("content",function(message){
 searchSocket.on("message", function(message){
     console.log(message);
     if(JSON.parse(message).frequent_search != undefined){
-        populateRecomm(JSON.parse(message).frequent_search);
+        populateFreqSearch(JSON.parse(message).frequent_search);
     } else {
         populateRecomm(JSON.parse(message).recommendations);
     }    
@@ -125,6 +133,25 @@ function readyResults(results){
     console.log(pagedRes);
 }
 
+function userBias(id){
+    if(Boolean(sessionStorage.getItem("loggedIn")) === true){
+        console.log(id);
+        axios.post('http://localhost:3000/update_bias',{
+        _id:currentPageResults[id]._id
+    }).then(
+        window.location.replace(currentPageResults[id].url)
+    );
+    } else {
+        window.location.replace(currentPageResults[id].url);
+    }
+}
+
+// function mountUserBias(textEdits, idStore){
+//     for(q=0;q<textEdits.length;q++){
+//         document.getElementById(textEdits[q]).ondblclick = sendBias(idStore[q]._id,idStore[q].url);
+//     }
+// }
+
 function renderCurrentPageResults(currentPageResults){
     console.log(currentPageResults);
     var difference = 5-currentPageResults.length;
@@ -146,13 +173,16 @@ function renderCurrentPageResults(currentPageResults){
 
     for (q=0;q<currentPageResults.length;q++){
         document.getElementById(textIdsToEdit[q]).innerHTML=currentPageResults[q].title[0] +' - '+ currentPageResults[q].url;
-        document.getElementById(hrefIdsToEdit[q]).href=currentPageResults[q].url;
+        //if(sessionStorage.getItem("loggedIn") !== true){
+        //document.getElementById(hrefIdsToEdit[q]).href=currentPageResults[q].url;
+        //}
+        //document.getElementById(textIdsToEdit[q]).ondblclick = sendBias(currentPageResults[q]._id);
         document.getElementById(contentsToEdit[q]).innerHTML = currentPageResults[q]._id;
-        
     }
     document.getElementById('resultsWalaQueryBox').value = sessionStorage.getItem("searchquery");
     handleNoResultsFound();
     checkForContentMount();
+    //mountUserBias(textIdsToEdit, currentPageResults);
 }
 
 function handleNoResultsFound(){
@@ -166,13 +196,14 @@ function handleNoResultsFound(){
     console.log(sessionStorage.getItem("FixedBydYM?"));
     var sorryPlug = document.getElementById('sorryPlug');
     if(goodSearch !== 'yes'){
-        sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';   
+        sorryPlug.innerHTML = '<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+        sessionStorage.removeItem("GoodSearch?");
     }
     var alternative = sessionStorage.getItem("alternative");
-    if(alternative !== null){
-        
+    if(alternative !== null){        
         var dYMPlug = document.getElementById('dYMPlug');
         dYMPlug.innerHTML = '<div class="alert alert-info"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i></button><span><span>&#128519;</span> We are showing results for "'+(alternative)+' " instead. Hope that helps! </span></div>';
+        sessionStorage.removeItem("alternative");
     }
 }
 
@@ -224,125 +255,24 @@ function saveResults(results){
 
 function sendSearchQueryFromResults(lucky){
     var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('resultsWalaQueryBox').value);
-
-    if(personalized){
-        if(Boolean(sessionStorage.getItem("loggedIn"))){
-            USER_SEARCH_URL = String(BASE_URL+ sessionStorage.getItem("username") + '/search');
-            var searchQuery = {
-                query:document.getElementById('queryBox').value,
-                personalization:personalized,
-            };
-            axios.post(USER_SEARCH_URL,
-                searchQuery
-                )
-               .then(function (response) {
-                    console.log(response);
-                    
-                    console.log(response.data.search_results);
-                    
-                    if(response.data.search_results === "No result Found" ){
-                        console.log("NR!");
-                        
-                        sessionStorage.setItem("GoodSearch?"," no");
-                        console.log("Gotta ask server for something that makes sense!");
-                        
-                        //process do you mean
-                        if(response.data.do_you_mean !== undefined){
-                            sessionStorage.setItem("dYM?","yes");
-                            sessionStorage.setItem("alternative",response.data.do_you_mean);
-                            axios.get(USER_SEARCH_URL,{
-                                query:response.data.do_you_mean,
-                                personalized:personalized
-                            }
-                                )
-                               .then(function (response) {
-                                    console.log(response);
-                                    results=response.data.search_results;
-                                    sessionStorage.setItem("FixedBydYM?","yes");
-                                    saveResults(results);
-                                    window.location.replace('results.html');
-                                 })
-                                 .catch(function (error) {
-                                    console.log(error);
-                                 });
-                        }
-                    }else{
-                        sessionStorage.setItem("GoodSearch?","yes");
-                        results=response.data.search_results;
-                        saveResults(results);
-                        window.location.replace('results.html');
-                    }
-                 })
-                 .catch(function (error) {
-                    console.log(error);
-                 });
-        }
-    }
-    
-    var searchQuery = {
-        queryString:document.getElementById('resultsWalaQueryBox').value,
-        lucky:lucky
-    };
-    axios.get(USER_SEARCH_URL,
-        searchQuery
-        )
-       .then(function (response) {
-            console.log(response);
-            
-            console.log(response.data.search_results);
-            
-            if(response.data.search_results === "No result Found" ){
-                console.log("NR!");
-                
-                sessionStorage.setItem("GoodSearch?"," no");
-                console.log("Gotta ask server for something that makes sense!");
-                
-                //process do you mean
-                if(response.data.do_you_mean !== undefined){
-                    sessionStorage.setItem("dYM?","yes");
-                    sessionStorage.setItem("alternative",response.data.do_you_mean);
-                    axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
-                        {}
-                        )
-                       .then(function (response) {
-                            console.log(response)
-                            results=response.data.search_results;
-                            saveResults(results);
-                            window.location.replace('results.html');
-                         })
-                         .catch(function (error) {
-                            console.log(error);
-                         });
-                }
-            }else{
-                console.log("valid results");
-                results=response.data.search_results;
-                saveResults(results);
-                sessionStorage.setItem("validResults?","yes");
-                window.location.replace('results.html');
-            }
-         })
-         .catch(function (error) {
-            console.log(error);
-         });
-}
-//document.getElementById('queryBox').value
-
-function sendSearchQuery(lucky){
-
-    var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('queryBox').value);
     console.log("personalized is " + personalized);
+    
     if(personalized){
         if(Boolean(sessionStorage.getItem("loggedIn"))){
-            USER_SEARCH_URL = String(BASE_URL+ sessionStorage.getItem("username") + '/search');
+            console.log("user logged in!")
+            
+            USER_SEARCH_URL = String('http://localhost:3000/'+ sessionStorage.getItem("username") + '/search');
+            console.log(USER_SEARCH_URL)
+            
             var searchQuery = {
-                query:document.getElementById('queryBox').value,
+                query:document.getElementById('resultsWalaQueryBox').value,
                 personalization:personalized,
             };
             axios.post(USER_SEARCH_URL,
-                searchQuery
-                )
+                searchQuery)
                .then(function (response) {
+                    console.log("got reponse")
+                    
                     console.log(response);
                     
                     console.log(response.data.search_results);
@@ -370,6 +300,9 @@ function sendSearchQuery(lucky){
                                  .catch(function (error) {
                                     console.log(error);
                                  });
+                        } else {
+                            var sorrySearchPlug = document.getElementById('sorrySearchPlug');
+                            sorrySearchPlug.innerHTML='<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
                         }
                     }else{
                         sessionStorage.setItem("GoodSearch?","yes");
@@ -382,56 +315,185 @@ function sendSearchQuery(lucky){
                     console.log(error);
                  });
         }
-        window.alert("Please login for personalized search experience! Want to continue in guest mode?");
+        else{
+            window.alert("Please login for personalized search experience! Want to continue in guest mode?");
+        }
     }
-    
-    var searchQuery = {
-        personalization:personalized,
-        queryString:document.getElementById('queryBox').value,
-        lucky:lucky
-    };
-    axios.get(USER_SEARCH_URL,
-        searchQuery
-        )
-       .then(function (response) {
-            console.log(response);
-            
-            console.log(response.data.search_results);
-            
-            if(response.data.search_results === "No result Found" ){
-                console.log("NR!");
+    else{
+        var searchQuery = {
+            personalization:personalized,
+            queryString:document.getElementById('resultsWalaQueryBox').value,
+            lucky:lucky
+        };
+        axios.get(USER_SEARCH_URL,
+            searchQuery
+            )
+           .then(function (response) {
+                console.log(response);
                 
-                sessionStorage.setItem("GoodSearch?"," no");
-                console.log("Gotta ask server for something that makes sense!");
+                console.log(response.data.search_results);
                 
-                //process do you mean
-                if(response.data.do_you_mean !== undefined){
-                    sessionStorage.setItem("dYM?","yes");
-                    sessionStorage.setItem("alternative",response.data.do_you_mean);
-                    axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
-                        {}
-                        )
-                       .then(function (response) {
-                            console.log(response);
-                            results=response.data.search_results;
-                            sessionStorage.setItem("FixedBydYM?","yes");
-                            saveResults(results);
-                            window.location.replace('results.html');
-                         })
-                         .catch(function (error) {
-                            console.log(error);
-                         });
+                if(response.data.search_results === "No result Found" ){
+                    console.log("NR!");
+                    
+                    sessionStorage.setItem("GoodSearch?"," no");
+                    console.log("Gotta ask server for something that makes sense!");
+                    
+                    //process do you mean
+                    if(response.data.do_you_mean !== undefined){
+                        sessionStorage.setItem("dYM?","yes");
+                        sessionStorage.setItem("alternative",response.data.do_you_mean);
+                        axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
+                            {}
+                            )
+                           .then(function (response) {
+                                console.log(response);
+                                results=response.data.search_results;
+                                sessionStorage.setItem("FixedBydYM?","yes");
+                                saveResults(results);
+                                window.location.replace('results.html');
+                             })
+                             .catch(function (error) {
+                                console.log(error);
+                             });
+                    } else {
+                        var sorrySearchPlug = document.getElementById('sorrySearchPlug');
+                            sorrySearchPlug.innerHTML='<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+                    }
+                }else{
+                    sessionStorage.setItem("GoodSearch?","yes");
+                    results=response.data.search_results;
+                    saveResults(results);
+                    window.location.replace('results.html');
                 }
-            }else{
-                sessionStorage.setItem("GoodSearch?","yes");
-                results=response.data.search_results;
-                saveResults(results);
-                window.location.replace('results.html');
-            }
-         })
-         .catch(function (error) {
-            console.log(error);
-         });
+             })
+             .catch(function (error) {
+                console.log(error);
+             });
+    }
+}
+//document.getElementById('queryBox').value
+
+function sendSearchQuery(lucky){
+
+    var USER_SEARCH_URL = String(BASE_SEARCH_URL + document.getElementById('queryBox').value);
+    console.log("personalized is " + personalized);
+    
+    if(personalized){
+        if(Boolean(sessionStorage.getItem("loggedIn"))){
+            console.log("user logged in!")
+            
+            USER_SEARCH_URL = String('http://localhost:3000/'+ sessionStorage.getItem("username") + '/search');
+            console.log(USER_SEARCH_URL)
+            
+            var searchQuery = {
+                query:document.getElementById('queryBox').value,
+                personalization:personalized,
+            };
+            axios.post(USER_SEARCH_URL,
+                searchQuery)
+               .then(function (response) {
+                    console.log("got reponse")
+                    
+                    console.log(response);
+                    
+                    console.log(response.data.search_results);
+                    
+                    if(response.data.search_results === "No result Found" ){
+                        console.log("NR!");
+                        
+                        sessionStorage.setItem("GoodSearch?"," no");
+                        console.log("Gotta ask server for something that makes sense!");
+                        
+                        //process do you mean
+                        if(response.data.do_you_mean !== undefined){
+                            sessionStorage.setItem("dYM?","yes");
+                            sessionStorage.setItem("alternative",response.data.do_you_mean);
+                            axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
+                                {}
+                                )
+                               .then(function (response) {
+                                    console.log(response);
+                                    results=response.data.search_results;
+                                    sessionStorage.setItem("FixedBydYM?","yes");
+                                    saveResults(results);
+                                    window.location.replace('results.html');
+                                 })
+                                 .catch(function (error) {
+                                    console.log(error);
+                                 });
+                        } else{
+                            var sorrySearchPlug = document.getElementById('sorrySearchPlug');
+                            sorrySearchPlug.innerHTML='<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+                        }
+                    }else{
+                        sessionStorage.setItem("GoodSearch?","yes");
+                        results=response.data.search_results;
+                        saveResults(results);
+                        window.location.replace('results.html');
+                    }
+                 })
+                 .catch(function (error) {
+                    console.log(error);
+                 });
+        }
+        else{
+            window.alert("Please login for personalized search experience! Want to continue in guest mode?");
+        }
+    }
+    else{
+        var searchQuery = {
+            personalization:personalized,
+            queryString:document.getElementById('queryBox').value,
+            lucky:lucky
+        };
+        axios.get(USER_SEARCH_URL,
+            searchQuery
+            )
+           .then(function (response) {
+                console.log(response);
+                
+                console.log(response.data.search_results);
+                
+                if(response.data.search_results === "No result Found" ){
+                    console.log("NR!");
+                    
+                    sessionStorage.setItem("GoodSearch?"," no");
+                    console.log("Gotta ask server for something that makes sense!");
+                    
+                    //process do you mean
+                    if(response.data.do_you_mean !== undefined){
+                        sessionStorage.setItem("dYM?","yes");
+                        sessionStorage.setItem("alternative",response.data.do_you_mean);
+                        axios.get(BASE_SEARCH_URL+response.data.do_you_mean,
+                            {}
+                            )
+                           .then(function (response) {
+                                console.log(response);
+                                results=response.data.search_results;
+                                sessionStorage.setItem("FixedBydYM?","yes");
+                                saveResults(results);
+                                window.location.replace('results.html');
+                             })
+                             .catch(function (error) {
+                                console.log(error);
+                             });
+                    }
+                    else{
+                        var sorrySearchPlug = document.getElementById('sorrySearchPlug');
+                            sorrySearchPlug.innerHTML='<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close"><i class="tim-icons icon-simple-remove"></i> </button><span><span style="font-size:20px;">&#128517;</span> Sorry! We could not find any results matching your query.</span></div>';
+                    }
+                }else{
+                    sessionStorage.setItem("GoodSearch?","yes");
+                    results=response.data.search_results;
+                    saveResults(results);
+                    window.location.replace('results.html');
+                }
+             })
+             .catch(function (error) {
+                console.log(error);
+             });
+    }
 }
 
 

@@ -1,5 +1,5 @@
 
-BASE_REG_URL = 'http://c83607ee0d3b.ngrok.io/register';
+BASE_REG_URL = 'http://834cba8c57a1.ngrok.io/register';
 
 function handleUserReg(){
     var agreeToTnC = document.getElementById('agreeToTnC').checked;

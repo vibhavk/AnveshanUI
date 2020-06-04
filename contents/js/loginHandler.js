@@ -1,4 +1,4 @@
-BASE_LOGIN_URL = 'http://8e583380c1a6.ngrok.io/login';
+BASE_LOGIN_URL = 'http://localhost:3000/login';
 
 function handleUserLogin(){
         var userInfoLogin = {
@@ -10,11 +10,16 @@ function handleUserLogin(){
         axios.post(BASE_LOGIN_URL, 
             userInfoLogin)
         .then(function(response){
-            if(response.data.code == "200"){
-                console.log(userInfoLogin.username);
+            console.log(response);
+            if(response.status == "200"){
+                console.log(userInfoLogin.username + 'logged in!');
                 sessionStorage.setItem("loggedIn",true);
                 sessionStorage.setItem("username",userInfoLogin.username);
+                console.log(response.data);
+                sessionStorage.setItem("cookie",response.data);
                 window.location.replace('search.html');
+            } else {
+                console.log("error!");
             }
         });
 }
